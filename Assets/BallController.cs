@@ -12,6 +12,7 @@ public class BallController : MonoBehaviour
 
     Vector3 Direction;
     public static event Action<int> ScoredGoal;
+    float Rotation;
 
     void Start()
     {
@@ -20,13 +21,16 @@ public class BallController : MonoBehaviour
     void Update()
     {
         Body.velocity = Direction * Speed;
+        Rotation += Speed / 5;
+        if (Rotation > 360) Rotation -= 360;
+        gameObject.transform.rotation = Quaternion.Euler(0, Rotation, 0);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.gameObject.tag == "Wall")
         {
-            Speed = Math.Min(Speed + 1, MaxSpeed);
+            AddSpeed(2);
             SetDirection(Vector3.Reflect(Direction, collision.contacts[0].normal));
         }
         else if (collision.collider.gameObject.tag == "Goal")
@@ -34,6 +38,11 @@ public class BallController : MonoBehaviour
             var goal = collision.collider.gameObject.GetComponent<GoalController>();
             ScoredGoal?.Invoke(1 - goal.Player);
         }
+    }
+
+    public void AddSpeed(int amount)
+    {
+        Speed = Math.Min(Speed + amount, MaxSpeed);
     }
 
     public void ResetSpeed()
