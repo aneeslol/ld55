@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class RunnerController : BaseMinionController
 {
+    [SerializeField] AudioSource SlashAudio;
+
     new void Start()
     {
         SetDirection(new Vector3(Player == 0 ? 1 : -1, 0, 0));
@@ -38,6 +40,7 @@ public class RunnerController : BaseMinionController
             if (paddle.Player != Player && paddle.IsActive())
             {
                 AnimatorController?.Play("Attack");
+                SlashAudio.Play();
                 paddle.Damage(1);
                 Speed = 0;
                 IsDamaged = true;
@@ -55,6 +58,7 @@ public class RunnerController : BaseMinionController
             {
                 Speed = 0;
                 AnimatorController?.Play("Attack");
+                SlashAudio.Play();
                 DOTween.Sequence()
                     .OnComplete(() =>
                     {

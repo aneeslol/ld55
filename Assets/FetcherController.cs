@@ -59,6 +59,7 @@ public class FetcherController : BaseMinionController
                 .OnComplete(() => Die())
                 .SetDelay(.625f);
             ball.AddSpeed(3);
+            ball.PlayHitSound();
             ball.SetDirection(new Vector3(xVelocity, 0, zVelocity));
         }
         else if (other.gameObject.tag == "Goal")

@@ -9,6 +9,9 @@ public class BallController : MonoBehaviour
     [SerializeField] float Speed = 5;
     [SerializeField] float BaseSpeed = 5;
     [SerializeField] float MaxSpeed = 25;
+    [SerializeField] AudioSource HitAudio;
+    [SerializeField] AudioSource BigHitAudio;
+    [SerializeField] AudioSource BounceAudio;
 
     Vector3 Direction;
     public static event Action<int> ScoredGoal;
@@ -43,6 +46,7 @@ public class BallController : MonoBehaviour
         if (collision.collider.gameObject.tag == "Wall")
         {
             AddSpeed(2);
+            PlayBounceSound();
             SetDirection(Vector3.Reflect(Direction, collision.contacts[0].normal));
         }
         else if (collision.collider.gameObject.tag == "Goal")
@@ -60,6 +64,16 @@ public class BallController : MonoBehaviour
     public void ResetSpeed()
     {
         Speed = BaseSpeed;
+    }
+
+    public void PlayHitSound()
+    {
+        HitAudio.Play();
+    }
+
+    public void PlayBounceSound()
+    {
+        BounceAudio.Play();
     }
 
     public void SetDirection(Vector3 direction)

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
@@ -35,6 +36,13 @@ namespace Assets
         [SerializeField] SummonIconController KeeperIcon;
         [SerializeField] SummonIconController FetcherIcon;
         [SerializeField] SummonIconController PikeIcon;
+
+        [SerializeField] AudioSource CountdownAudio;
+        [SerializeField] AudioSource CountdownGoAudio;
+        [SerializeField] AudioSource GoalAudio;
+
+        [SerializeField] public AudioMixer AudioMixer;
+        [SerializeField] public TMP_Text VolumeText;
 
         int Player0Score;
         int Player1Score;
@@ -165,26 +173,57 @@ namespace Assets
             var zMin = -8f;
             var zMax = 7.75f;
             var summonLocation = new Vector3(Random.Range(xMin, xMax), .75f, Random.Range(zMin, zMax));
+            var spawnNonKeeper = false;
+            var keeperCount = MinionControllers.Count(c => c.Player == 1 && c is KeeperController);
             if (summon < 3)
             {
-                if (MinionControllers.Count(c => c.Player == 1 && c is KeeperController) == 5)
+                if (keeperCount == 5 || (keeperCount == 3 && summon == 2))
+                {
+                    spawnNonKeeper = true;
+                }
+                else
+                {
+                    do
+                    {
+                        summonLocation.x = (RNG.Next(0, 5) * 2) + 2.75f;
+                    }
+                    while (MinionControllers.Any(c =>
+                        c.Player == 1
+                        && c is KeeperController
+                        && c.transform.position.x == summonLocation.x));
+                    SpawnMinion(KEEPER_COST, summonLocation, 1, "Keeper");
+                }
+            }
+
+            if (summon == 3 || spawnNonKeeper)
+            {
+                var pool = new List<string> { "Fetcher" };
+                if (MinionControllers.Count(c => c.Player == 0 && c is KeeperController) > 0)
+                {
+                    pool.Add("Runner");
+                    pool.Add("Runner");
+                    pool.Add("Runner");
+                }
+
+                if (MinionControllers.Count(c => c.Player == 1 && c is KeeperController) > 0)
+                {
+                    pool.Add("Pike");
+                }
+                var unit = pool[RNG.Next(0, pool.Count)];
+
+                if (unit == "Runner")
                 {
                     SpawnMinion(RUNNER_COST, summonLocation, 1, "Runner");
-                    return;
                 }
-                do
+                else if(unit == "Fetcher")
                 {
-                    summonLocation.x = (RNG.Next(0, 5) * 2) + 2.75f;
+                    SpawnMinion(FETCHER_COST, summonLocation, 1, "Fetcher");
                 }
-                while (MinionControllers.Any(c =>
-                    c.Player == 1
-                    && c is KeeperController
-                    && c.transform.position.x == summonLocation.x));
-                SpawnMinion(KEEPER_COST, summonLocation, 1, "Keeper");
-            }
-            else if (summon == 4 && MinionControllers.Count(c => c.Player == 0 && c is KeeperController) > 0)
-            {
-                SpawnMinion(RUNNER_COST, summonLocation, 1, "Runner");
+                else if(unit == "Pike")
+                {
+                    summonLocation = new Vector3(Random.Range(xMin, xMin + 1), .75f, Random.Range(zMin, zMax));
+                    SpawnMinion(PIKE_COST, summonLocation, 1, "Pike");
+                }
             }
         }
 
@@ -220,6 +259,7 @@ namespace Assets
             else
                 Player1Score++;
             UpdateScore();
+            GoalAudio.Play();
 
             if (Player0Score == MAX_SCORE)
             {
@@ -258,11 +298,13 @@ namespace Assets
             CountdownText.text = "3";
             CountdownText.fontSize = 144;
             CountdownText.gameObject.SetActive(true);
+            CountdownAudio.Play();
             DOTween.To(() => CountdownText.fontSize, v => CountdownText.fontSize = v, 0, 1)
                 .OnComplete(() =>
                 {
                     CountdownText.text = "2";
                     CountdownText.fontSize = 144;
+                    CountdownAudio.Play();
                 });
 
             DOTween.To(() => CountdownText.fontSize, v => CountdownText.fontSize = v, 0, 1)
@@ -270,6 +312,7 @@ namespace Assets
                 {
                     CountdownText.text = "1";
                     CountdownText.fontSize = 144;
+                    CountdownAudio.Play();
                 })
                 .SetDelay(1);
 
@@ -279,6 +322,7 @@ namespace Assets
                     CountdownText.text = "GO!";
                     CountdownText.fontSize = 144;
                     ServeBall(scoringPlayer);
+                    CountdownGoAudio.Play();
                 })
                 .SetDelay(2);
 
@@ -301,6 +345,27 @@ namespace Assets
         private void UpdateScore()
         {
             ScoreText.text = $"{Player0Score} - {Player1Score}";
+        }
+
+        public void Sounds_Clicked()
+        {
+            var floatName = "Volume";
+            AudioMixer.GetFloat(floatName, out var volume);
+            if (volume == 0)
+            {
+                AudioMixer.SetFloat(floatName, -20);
+                VolumeText.text = "Volume: 50%";
+            }
+            else if (volume == -20f)
+            {
+                AudioMixer.SetFloat(floatName, -80);
+                VolumeText.text = "Volume: 0%";
+            }
+            else if (volume == -80f)
+            {
+                AudioMixer.SetFloat(floatName, 0);
+                VolumeText.text = "Volume: 100%";
+            }
         }
     }
 }

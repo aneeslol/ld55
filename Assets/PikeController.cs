@@ -6,6 +6,7 @@ using UnityEngine;
 public class PikeController : BaseMinionController
 {
     [SerializeField] SkinnedMeshRenderer ShieldRenderer;
+    [SerializeField] AudioSource SlashAudio;
 
     new void Start()
     {
@@ -50,6 +51,7 @@ public class PikeController : BaseMinionController
             if (runner.Player != Player && runner.IsActive())
             {
                 AnimatorController?.Play("Attack");
+                SlashAudio.Play();
                 DOTween.Sequence()
                     .OnComplete(() =>
                     {

@@ -51,6 +51,7 @@ public class KeeperController : BaseMinionController
                 .OnComplete(() => AnimatorController.Play("Walk"))
                 .SetDelay(.625f);
             ball.AddSpeed(2);
+            ball.PlayHitSound();
             ball.SetDirection(new Vector3(xVelocity, 0, zVelocity));
         }
         else if (collision.gameObject.tag == "Wall")
