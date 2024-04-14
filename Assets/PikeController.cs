@@ -51,7 +51,10 @@ public class PikeController : BaseMinionController
             if (runner.Player != Player && runner.IsActive())
             {
                 AnimatorController?.Play("Attack");
-                SlashAudio.Play();
+
+                if(other.gameObject.tag == "Fetcher")
+                    SlashAudio.Play();
+
                 DOTween.Sequence()
                     .OnComplete(() =>
                     {

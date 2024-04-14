@@ -58,7 +58,15 @@ public class RunnerController : BaseMinionController
             {
                 Speed = 0;
                 AnimatorController?.Play("Attack");
-                SlashAudio.Play();
+
+                if (other.gameObject.tag == "Runner" && Player == 1)
+                {
+                }
+                else
+                {
+                    SlashAudio.Play();
+                }
+
                 DOTween.Sequence()
                     .OnComplete(() =>
                     {

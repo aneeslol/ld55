@@ -159,7 +159,7 @@ namespace Assets
                 if (Input.GetMouseButtonDown(0))
                 {
                     Time.timeScale = 1;
-                    SceneManager.LoadScene(0);
+                    SceneManager.LoadScene(2);
                 }
                 return;
             }
