@@ -48,7 +48,7 @@ public class RunnerController : BaseMinionController
                     }).SetDelay(.3f);
             }
         }
-        else if (other.gameObject.tag == "Runner" || other.gameObject.tag == "Fetcher")
+        else if (other.gameObject.tag == "Runner" || other.gameObject.tag == "Fetcher" || other.gameObject.tag == "Pike")
         {
             var runner = other.gameObject.GetComponent<BaseMinionController>();
             if (runner.Player != Player && runner.IsActive())

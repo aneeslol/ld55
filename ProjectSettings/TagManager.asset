@@ -11,6 +11,7 @@ TagManager:
   - Floor
   - Goal
   - Fetcher
+  - Pike
   layers:
   - Default
   - TransparentFX

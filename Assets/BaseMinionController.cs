@@ -18,7 +18,7 @@ public class BaseMinionController : MonoBehaviour
     public bool IsDead = false;
 
     public static event Action<BaseMinionController> OnDeath;
-    Color darkRed = new Color(.5f, 0f, 0f);
+    protected Color darkRed = new Color(.5f, 0f, 0f);
 
     protected void Start()
     {
@@ -66,6 +66,11 @@ public class BaseMinionController : MonoBehaviour
         return !IsDead && !IsDamaged;
     }
 
+    public virtual void DamageEvent()
+    {
+        
+    }
+
     public virtual void Damage(int damage)
     {
         Health -= damage;
@@ -77,6 +82,7 @@ public class BaseMinionController : MonoBehaviour
             .OnComplete(() =>
             {
                 IsDamaged = false;
+                DamageEvent();
                 if (Health <= 0)
                     Die();
             });

@@ -229,7 +229,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3680635513693379245, guid: 1140742990926ce49846228d401a9644, type: 3}
       propertyPath: m_text
-      value: Moves straight ahead and attacks enemy minions. Does not hit the ball.
+      value: '<b>RUNNER</b>
+
+
+        Moves straight ahead and attacks an enemy minion
+        once. Does not hit the ball.'
       objectReference: {fileID: 0}
     - target: {fileID: 6591351404606155258, guid: 1140742990926ce49846228d401a9644, type: 3}
       propertyPath: m_Sprite
@@ -349,6 +353,10 @@ PrefabInstance:
       propertyPath: m_text
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 1837801342531498593, guid: 1140742990926ce49846228d401a9644, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2562920162748922319, guid: 1140742990926ce49846228d401a9644, type: 3}
       propertyPath: m_Name
       value: FetcherIcon
@@ -359,7 +367,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3680635513693379245, guid: 1140742990926ce49846228d401a9644, type: 3}
       propertyPath: m_text
-      value: Chases after the ball and hits it towards the opposing goal.
+      value: '<b>FETCHER</b>
+
+
+        Chases after the ball and hits it once towards
+        the opposing goal.'
       objectReference: {fileID: 0}
     - target: {fileID: 6591351404606155258, guid: 1140742990926ce49846228d401a9644, type: 3}
       propertyPath: m_Sprite
@@ -642,8 +654,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3680635513693379245, guid: 1140742990926ce49846228d401a9644, type: 3}
       propertyPath: m_text
-      value: Patrols vertically and hits the ball diagonally towards the opposing
-        goal.
+      value: '<b>KEEPER</b>
+
+
+        Patrols vertically and hits the ball diagonally
+        towards the opposing goal.'
       objectReference: {fileID: 0}
     - target: {fileID: 6591351404606155258, guid: 1140742990926ce49846228d401a9644, type: 3}
       propertyPath: m_Sprite
@@ -2418,7 +2433,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 533068577272858244, guid: 1140742990926ce49846228d401a9644, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 533068577272858244, guid: 1140742990926ce49846228d401a9644, type: 3}
       propertyPath: m_AnchorMin.x
@@ -2426,7 +2441,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 533068577272858244, guid: 1140742990926ce49846228d401a9644, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 533068577272858244, guid: 1140742990926ce49846228d401a9644, type: 3}
       propertyPath: m_SizeDelta.x
@@ -2466,11 +2481,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 533068577272858244, guid: 1140742990926ce49846228d401a9644, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 275
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 533068577272858244, guid: 1140742990926ce49846228d401a9644, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -274
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 533068577272858244, guid: 1140742990926ce49846228d401a9644, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2484,17 +2499,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 579020182077714089, guid: 1140742990926ce49846228d401a9644, type: 3}
+      propertyPath: m_text
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 1010617153902919675, guid: 1140742990926ce49846228d401a9644, type: 3}
       propertyPath: m_text
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 1837801342531498593, guid: 1140742990926ce49846228d401a9644, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2562920162748922319, guid: 1140742990926ce49846228d401a9644, type: 3}
       propertyPath: m_Name
-      value: Icon
+      value: PikeIcon
       objectReference: {fileID: 0}
     - target: {fileID: 2562920162748922319, guid: 1140742990926ce49846228d401a9644, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3680635513693379245, guid: 1140742990926ce49846228d401a9644, type: 3}
+      propertyPath: m_text
+      value: '<b>PIKE</b>
+
+
+        Stationary, attacks incoming enemy minions twice.
+        Does not hit the ball.'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6591351404606155258, guid: 1140742990926ce49846228d401a9644, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5272892f645501d4081db04d2584c252, type: 3}
+    - target: {fileID: 8353973254187255334, guid: 1140742990926ce49846228d401a9644, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2506,6 +2545,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 533068577272858244, guid: 1140742990926ce49846228d401a9644, type: 3}
   m_PrefabInstance: {fileID: 1573574582}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1573574584 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6032312809866843107, guid: 1140742990926ce49846228d401a9644, type: 3}
+  m_PrefabInstance: {fileID: 1573574582}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c378e9378be0a894f82a3e93ff2345b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1643006582
 GameObject:
   m_ObjectHideFlags: 0
@@ -2860,6 +2910,7 @@ MonoBehaviour:
   PaddlePrefab: {fileID: 2629039742704921167, guid: e59007ce40031f542ab73932cdf79ef1, type: 3}
   RunnerPrefab: {fileID: 7401529868734205684, guid: a21191643a2e7c7499513656cc08bb62, type: 3}
   FetcherPrefab: {fileID: 7401529868734205684, guid: b533a572a615cf4408e1f33eb3634438, type: 3}
+  PikePrefab: {fileID: 7401529868734205684, guid: c8f31fc31622c044884738de305b7088, type: 3}
   SummoningCirclePrefab: {fileID: 2681227274084299823, guid: 1212c554e7e23fe4d8b13da436f415a0, type: 3}
   ScoreEffectPrefab: {fileID: 8468572494578659521, guid: c122365778213f941a623e7f8b406bfc, type: 3}
   Mana: 100
@@ -2869,6 +2920,7 @@ MonoBehaviour:
   RunnerIcon: {fileID: 1456414815}
   KeeperIcon: {fileID: 443803647}
   FetcherIcon: {fileID: 147706601}
+  PikeIcon: {fileID: 1573574584}
 --- !u!4 &2048904762
 Transform:
   m_ObjectHideFlags: 0

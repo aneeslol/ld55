@@ -21,6 +21,7 @@ namespace Assets
         [SerializeField] GameObject PaddlePrefab;
         [SerializeField] GameObject RunnerPrefab;
         [SerializeField] GameObject FetcherPrefab;
+        [SerializeField] GameObject PikePrefab;
         [SerializeField] GameObject SummoningCirclePrefab;
         [SerializeField] GameObject ScoreEffectPrefab;
 
@@ -33,6 +34,7 @@ namespace Assets
         [SerializeField] SummonIconController RunnerIcon;
         [SerializeField] SummonIconController KeeperIcon;
         [SerializeField] SummonIconController FetcherIcon;
+        [SerializeField] SummonIconController PikeIcon;
 
         int Player0Score;
         int Player1Score;
@@ -41,6 +43,7 @@ namespace Assets
         const int KEEPER_COST = 80;
         const int RUNNER_COST = 40;
         const int FETCHER_COST = 60;
+        const int PIKE_COST = 50;
         const int MAX_SCORE = 11;
 
         List<BaseMinionController> MinionControllers = new();
@@ -78,6 +81,10 @@ namespace Assets
             else if (button == 3)
             {
                 SpawnMinion(FETCHER_COST, location, 0, "Fetcher");
+            }
+            else if (button == 4)
+            {
+                SpawnMinion(PIKE_COST, location, 0, "Pike");
             }
         }
 
@@ -118,6 +125,13 @@ namespace Assets
                         var runner = Instantiate(FetcherPrefab, location, Quaternion.identity);
                         var controller = runner.GetComponent<FetcherController>();
                         controller.Ball = Ball;
+                        MinionControllers.Add(controller);
+                        controller.SetPlayer(player);
+                    }
+                    else if (type == "Pike")
+                    {
+                        var runner = Instantiate(PikePrefab, location, Quaternion.identity);
+                        var controller = runner.GetComponent<PikeController>();
                         MinionControllers.Add(controller);
                         controller.SetPlayer(player);
                     }
@@ -196,6 +210,7 @@ namespace Assets
             RunnerIcon.SetActive(Mana > RUNNER_COST);
             KeeperIcon.SetActive(Mana > KEEPER_COST);
             FetcherIcon.SetActive(Mana > FETCHER_COST);
+            PikeIcon.SetActive(Mana > PIKE_COST);
         }
 
         private void BallController_ScoredGoal(int scoringPlayer)
