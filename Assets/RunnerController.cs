@@ -28,7 +28,7 @@ public class RunnerController : BaseMinionController
         if (!IsActive())
             return;
 
-        if (other.gameObject.tag == "Wall" || other.gameObject.tag == "Goal")
+        if (other.gameObject.tag == "Goal")
         {
             Die();
         }
@@ -48,9 +48,9 @@ public class RunnerController : BaseMinionController
                     }).SetDelay(.3f);
             }
         }
-        else if (other.gameObject.tag == "Runner")
+        else if (other.gameObject.tag == "Runner" || other.gameObject.tag == "Fetcher")
         {
-            var runner = other.gameObject.GetComponent<RunnerController>();
+            var runner = other.gameObject.GetComponent<BaseMinionController>();
             if (runner.Player != Player && runner.IsActive())
             {
                 Speed = 0;
@@ -59,6 +59,10 @@ public class RunnerController : BaseMinionController
                     .OnComplete(() =>
                     {
                         runner.Damage(1);
+                        if (other.gameObject.tag == "Fetcher")
+                        {
+                            Die();
+                        }
                     }).SetDelay(.3f);
             }
         }

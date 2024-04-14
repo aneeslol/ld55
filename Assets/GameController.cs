@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 namespace Assets
@@ -19,6 +20,7 @@ namespace Assets
 
         [SerializeField] GameObject PaddlePrefab;
         [SerializeField] GameObject RunnerPrefab;
+        [SerializeField] GameObject FetcherPrefab;
         [SerializeField] GameObject SummoningCirclePrefab;
         [SerializeField] GameObject ScoreEffectPrefab;
 
@@ -28,11 +30,18 @@ namespace Assets
         [SerializeField] float EnemyMana;
         [SerializeField] float EnemyMaxMana;
 
+        [SerializeField] SummonIconController RunnerIcon;
+        [SerializeField] SummonIconController KeeperIcon;
+        [SerializeField] SummonIconController FetcherIcon;
+
         int Player0Score;
         int Player1Score;
+        bool GameOver = false;
 
-        const int PADDLE_COST = 80;
+        const int KEEPER_COST = 80;
         const int RUNNER_COST = 40;
+        const int FETCHER_COST = 60;
+        const int MAX_SCORE = 11;
 
         List<BaseMinionController> MinionControllers = new();
         System.Random RNG = new System.Random();
@@ -58,13 +67,17 @@ namespace Assets
 
         private void FloorController_FloorClicked(int button, Vector3 location)
         {
-            if (button == 0)
+            if (button == 1)
             {
                 SpawnMinion(RUNNER_COST, location, 0, "Runner");
             }
-            else if (button == 1)
+            else if (button == 2)
             {
-                SpawnMinion(PADDLE_COST, location, 0, "Paddle");
+                SpawnMinion(KEEPER_COST, location, 0, "Keeper");
+            }
+            else if (button == 3)
+            {
+                SpawnMinion(FETCHER_COST, location, 0, "Fetcher");
             }
         }
 
@@ -86,7 +99,7 @@ namespace Assets
             DOTween.Sequence()
                 .OnComplete(() =>
                 {
-                    if (type == "Paddle")
+                    if (type == "Keeper")
                     {
                         var paddle = Instantiate(PaddlePrefab, location, Quaternion.identity);
                         var controller = paddle.GetComponent<KeeperController>();
@@ -97,6 +110,14 @@ namespace Assets
                     {
                         var runner = Instantiate(RunnerPrefab, location, Quaternion.identity);
                         var controller = runner.GetComponent<RunnerController>();
+                        MinionControllers.Add(controller);
+                        controller.SetPlayer(player);
+                    }
+                    else if (type == "Fetcher")
+                    {
+                        var runner = Instantiate(FetcherPrefab, location, Quaternion.identity);
+                        var controller = runner.GetComponent<FetcherController>();
+                        controller.Ball = Ball;
                         MinionControllers.Add(controller);
                         controller.SetPlayer(player);
                     }
@@ -111,8 +132,18 @@ namespace Assets
 
         private void Update()
         {
-            AddMana(.1f);
-            AddEnemyMana(.1f);
+            if (GameOver)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    Time.timeScale = 1;
+                    SceneManager.LoadScene(0);
+                }
+                return;
+            }
+
+            AddMana(.075f);
+            AddEnemyMana(.075f);
 
             var summon = RNG.Next(0, 1000);
             var xMin = 2.75f;
@@ -131,11 +162,11 @@ namespace Assets
                 {
                     summonLocation.x = (RNG.Next(0, 5) * 2) + 2.75f;
                 }
-                while (MinionControllers.Any(c => 
-                    c.Player == 1 
-                    && c is KeeperController 
+                while (MinionControllers.Any(c =>
+                    c.Player == 1
+                    && c is KeeperController
                     && c.transform.position.x == summonLocation.x));
-                SpawnMinion(PADDLE_COST, summonLocation, 1, "Paddle");
+                SpawnMinion(KEEPER_COST, summonLocation, 1, "Keeper");
             }
             else if (summon == 4 && MinionControllers.Count(c => c.Player == 0 && c is KeeperController) > 0)
             {
@@ -162,6 +193,9 @@ namespace Assets
         private void UpdateManaBar()
         {
             ManaBar.UpdateManaBar($"{(int)Mana} / {(int)MaxMana}", (Mana / MaxMana));
+            RunnerIcon.SetActive(Mana > RUNNER_COST);
+            KeeperIcon.SetActive(Mana > KEEPER_COST);
+            FetcherIcon.SetActive(Mana > FETCHER_COST);
         }
 
         private void BallController_ScoredGoal(int scoringPlayer)
@@ -171,10 +205,37 @@ namespace Assets
             else
                 Player1Score++;
             UpdateScore();
+
+            if (Player0Score == MAX_SCORE)
+            {
+                DOTween.KillAll();
+                CountdownText.text = "Red Wins!";
+                CountdownText.fontSize = 144;
+                CountdownText.gameObject.SetActive(true);
+                Time.timeScale = 0;
+                GameOver = true;
+                return;
+            }
+            else if (Player1Score == MAX_SCORE)
+            {
+                DOTween.KillAll();
+                CountdownText.text = "Blue Wins!";
+                CountdownText.fontSize = 144;
+                CountdownText.gameObject.SetActive(true);
+                Time.timeScale = 0;
+                GameOver = true;
+                return;
+            }
+
             Instantiate(ScoreEffectPrefab, Ball.gameObject.transform.position, Quaternion.identity);
 
             Ball.gameObject.SetActive(false);
-            CountdownServe(scoringPlayer);
+            DOTween.Sequence()
+                .OnComplete(() =>
+                {
+                    CountdownServe(scoringPlayer);
+                })
+                .SetDelay(2);
         }
 
         private void CountdownServe(int scoringPlayer)

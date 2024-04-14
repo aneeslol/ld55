@@ -10,6 +10,7 @@ TagManager:
   - Runner
   - Floor
   - Goal
+  - Fetcher
   layers:
   - Default
   - TransparentFX

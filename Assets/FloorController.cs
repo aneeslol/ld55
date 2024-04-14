@@ -16,24 +16,32 @@ public class FloorController : MonoBehaviour
 
     void Update()
     {
-        var mouseButton = -1;
-        if (Input.GetMouseButtonDown(0))
+        var button = -1;
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            mouseButton = 0;
+            button = 1;
         }
-        else if (Input.GetMouseButtonDown(1))
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            mouseButton = 1;
+            button = 2;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            button = 3;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            button = 4;
         }
 
-        if (mouseButton != -1)
+        if (button != -1)
         {
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity))
             {
                 if (hit.collider.gameObject == this.gameObject)
                 {
-                    FloorClicked?.Invoke(mouseButton, hit.point);
+                    FloorClicked?.Invoke(button, hit.point);
                 }
             }
         }

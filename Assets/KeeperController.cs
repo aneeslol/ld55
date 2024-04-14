@@ -8,7 +8,7 @@ public class KeeperController : BaseMinionController
     new void Start()
     {
         base.Start();
-        SetDirection(Random.Range(0, 2) == 0 ? Vector3.back : Vector3.forward);
+        SetDirection(GetRandomDirection());
     }
 
     new void Update()
@@ -19,9 +19,20 @@ public class KeeperController : BaseMinionController
     public override void SetPlayer(int player)
     {
         base.SetPlayer(player);
-        SetDirection(Random.Range(0, 2) == 0 ? Vector3.back : Vector3.forward);
+        SetDirection(GetRandomDirection());
         AnimatorController?.Play("Walk");
         gameObject.transform.rotation = Quaternion.Euler(0, Player == 0 ? 0 : 180, 0);
+    }
+
+    private Vector3 GetRandomDirection()
+    {
+        var direction = Random.Range(0, 2) == 0 ? Vector3.back : Vector3.forward;
+        if (gameObject.transform.position.z > 7.75f)
+            direction = Vector3.forward;
+        else if (gameObject.transform.position.z < -7.75f)
+            direction = Vector3.back;
+
+        return direction;
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -50,6 +61,19 @@ public class KeeperController : BaseMinionController
         else if (collision.gameObject.tag == "Paddle")
         {
             Damage(1);
+        }
+        else if (collision.gameObject.tag == "Fetcher")
+        {
+            var fetcher = collision.gameObject.GetComponent<FetcherController>();
+            if (fetcher.Player != Player && fetcher.IsActive())
+            {
+                AnimatorController?.Play("Attack");
+                DOTween.Sequence()
+                    .OnComplete(() =>
+                    {
+                        fetcher.Damage(1);
+                    }).SetDelay(.3f);
+            }
         }
     }
 }

@@ -14,6 +14,8 @@ public class BallController : MonoBehaviour
     public static event Action<int> ScoredGoal;
     float Rotation;
 
+    float StuckTimer = 0;
+
     void Start()
     {
     }
@@ -24,6 +26,16 @@ public class BallController : MonoBehaviour
         Rotation += Speed / 5;
         if (Rotation > 360) Rotation -= 360;
         gameObject.transform.rotation = Quaternion.Euler(0, Rotation, 0);
+
+        if (gameObject.transform.position.z == 8.625f || gameObject.transform.position.z == -8.625f)
+            StuckTimer++;
+        else
+            StuckTimer = 0;
+
+        if (StuckTimer > 30)
+        {
+            SetDirection(new Vector3(Direction.x, Direction.y, -Math.Sign(gameObject.transform.position.z)));
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
